@@ -112,8 +112,6 @@ public class NettyHttp2Client implements IHttpClient {
         // Start the client.
         _channel = b.connect().syncUninterruptibly().channel();
         mChannelId = _channel.id().asShortText();
-        LOG.debug("ShortText channel id: " + mChannelId);
-        LOG.debug("Connected to [" + host + ':' + PORT + ']');
 
         mNettyHttp2Client = this;
     }
