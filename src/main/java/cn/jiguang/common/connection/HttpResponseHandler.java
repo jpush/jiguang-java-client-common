@@ -117,10 +117,6 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<FullHttpRes
                 byteBuf.readBytes(arr);
                 String content = new String(arr, 0, contentLength, CharsetUtil.UTF_8);
                 list.add(content);
-                System.out.println("Protocol version: " + msg.protocolVersion());
-                System.out.println("status: " + list.get(0) + " response content: " + list.get(1));
-                LOG.debug("Protocol version: " + msg.protocolVersion());
-                LOG.debug("status: " + list.get(0) + " response content: " + list.get(1));
             }
 
             mNettyHttp2Client.setResponse(streamId + ctx.channel().id().asShortText(), list);
