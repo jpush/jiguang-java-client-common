@@ -6,56 +6,46 @@ Common lib for JiGuang Java clients.
 
 这是极光 Java client 的公共封装开发包，为 jpush, jmessage, jsms 等 client 提供公共依赖。
 
-版本更新：[Release页面](https://github.com/jpush/jiguang-java-client-common/releases)。下载更新请到这里。
+此分支提供使用 Netty 第三方工具发送请求功能。目前需要以 jar 方式引入，资源可以在 libs 下得到。
 
-> 非常欢迎各位开发者提交代码，贡献一份力量，Review 过有效的代码将会合入本项目。
-
-
-## 安装
-
-### maven 方式
-
-将下边的依赖条件放到你项目的 maven pom.xml 文件里。
-> 其中 slf4j 可以与 logback, log4j, commons-logging 等日志框架一起工作，可根据你的需要配置使用。
-
-```Java
-<dependency>
-    <groupId>cn.jpush.api</groupId>
-    <artifactId>jiguang-common</artifactId>
-    <version>0.1.4</version>
-</dependency>
-<dependency>
-	<groupId>com.google.code.gson</groupId>
-	<artifactId>gson</artifactId>
-	<version>2.2.4</version>
-</dependency>
-<dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-api</artifactId>
-	<version>1.7.5</version>
-</dependency>
-<!-- For log4j -->
-<dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-log4j12</artifactId>
-	<version>1.7.5</version>
-</dependency>
-<dependency>
-	<groupId>log4j</groupId>
-	<artifactId>log4j</artifactId>
-	<version>1.2.16</version>
-</dependency>
+## 使用
+首先要调用 NettyHttp2Client 的构造函数（之前用的是 NativeHttpClient）：
 ```
+NettyHttp2Client client = new NettyHttp2Client(authCode, proxy, conf, hostName);
+```
+前三个参数和 NativeHttpClient 一样，最后一个参数要传入一个主机域名。
 
-### jar 包方式
-
-* jiguang-common的jar包下载。[请点击](https://github.com/jpush/jiguang-java-client-common/releases)
-* [slf4j](http://www.slf4j.org/) / log4j (Logger)
-* [gson](https://code.google.com/p/google-gson/) (Google JSON Utils)
-
-[项目 libs/ 目录](https://github.com/jpush/jiguang-java-client-common/tree/master/libs)下可以找到 slf4j 及 gson jar 包复制到你的项目里去。
-
-## 编译源码
-
-> 如果开发者想基于本项目做一些扩展的开发，或者想了解本项目源码，可以参考此章，否则可略过此章。
+发送单个请求的做法和之前一致，可以参考 [jpush-api-java-client](https://github.com/jpush/jpush-api-java-client/tree/http2) 下 example 中的相关示例。NettyHttp2Client 新增发送批量请求的接口:
+```
+NettyHttp2Client.setRequest(HttpMethod, Queue<Http2Request>).execute(BaseCallback)
+```
+示例代码如下：
+```
+public void testSendPushesReuse() {
+        ClientConfig config = ClientConfig.getInstance();
+        String host = (String) config.get(ClientConfig.PUSH_HOST_NAME);
+        NettyHttp2Client client = new NettyHttp2Client(ServiceHelper.getBasicAuthorization(APP_KEY, MASTER_SECRET),
+                null, config, host);
+        Queue<Http2Request> queue = new LinkedList<Http2Request>();
+        String url = (String) config.get(ClientConfig.PUSH_PATH);
+        PushPayload payload = buildPushObject_all_all_alert();
+        for (int i=0; i<100; i++) {
+            queue.offer(new Http2Request(url, payload.toString()));
+        }
+        try {
+            long before = System.currentTimeMillis();
+            LOG.info("before: " + before);
+            client.setRequestQueue(HttpMethod.POST, queue).execute(new NettyHttp2Client.BaseCallback() {
+                @Override
+                public void onSucceed(ResponseWrapper wrapper) {
+                    PushResult result = BaseResult.fromResponse(wrapper, PushResult.class);
+                    LOG.info("Got result - " + result);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+```
+此为链接复用的接口，相对于循环发送单个请求，效率明显提高。可以参考 [PushClientTest](https://github.com/jpush/jpush-api-java-client/blob/http2/src/test/java/cn/jpush/api/push/PushClientTest.java)，写一下测试用例验证一下。
 
