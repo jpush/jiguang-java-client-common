@@ -99,8 +99,6 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<FullHttpRes
         if (streamId == null) {
             System.err.println("HttpResponseHandler unexpected message received: " + msg);
             return;
-        } else {
-            LOG.debug("HttpResponseHandler response message received: " + msg);
         }
 
         Entry<ChannelFuture, ChannelPromise> entry = streamidPromiseMap.get(streamId);
