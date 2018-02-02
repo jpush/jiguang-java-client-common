@@ -325,6 +325,12 @@ public class ApacheHttpClient implements IHttpClient {
         String responseContent = EntityUtils.toString(entity, "utf-8");
         wrapper.responseCode = status;
         wrapper.responseContent = responseContent;
+
+        String quota = getFirstHeader(response, RATE_LIMIT_QUOTA);
+        String remaining = getFirstHeader(response, RATE_LIMIT_Remaining);
+        String reset = getFirstHeader(response, RATE_LIMIT_Reset);
+        wrapper.setRateLimit(quota, remaining, reset);
+
         LOG.debug(wrapper.responseContent);
         EntityUtils.consume(entity);
         if (status >= 200 && status < 300) {
@@ -373,5 +379,11 @@ public class ApacheHttpClient implements IHttpClient {
 
             throw new APIRequestException(wrapper);
         }
+    }
+
+
+    private static String getFirstHeader(CloseableHttpResponse response, String name) {
+    	Header header = response.getFirstHeader(name);
+    	return header == null ? null : header.getValue();
     }
 }
