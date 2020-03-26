@@ -2,8 +2,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cn.jpush.api</groupId>
-	<artifactId>jiguang-common-SNAPSHOT</artifactId>
-	<version>1.1.8</version>
+	<artifactId>jiguang-common</artifactId>
+	<version>1.1.8-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<url>https://github.com/jpush/jiguang-java-client-common</url>
 	<name>Jiguang Client Common Dependencies</name>
