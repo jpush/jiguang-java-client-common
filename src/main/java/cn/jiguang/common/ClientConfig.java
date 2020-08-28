@@ -22,6 +22,9 @@ public class ClientConfig extends HashMap<String, Object> {
     public static final String PUSH_PATH = "push.path";
     public static final Object PUSH_PATH_SCHEMA = String.class;
 
+    public static final String FILE_PUSH_PATH = "file.push.path";
+    public static final Object FILE_PUSH_PATH_SCHEMA = String.class;
+
     public static final String BATCH_REGID_PUSH_PATH = "batch.regid.path";
     public static final Object BATCH_REGID_PUSH_PATH_SCHEMA = String.class;
 
@@ -130,6 +133,7 @@ public class ClientConfig extends HashMap<String, Object> {
 
         this.put(PUSH_HOST_NAME, "https://api.jpush.cn");
         this.put(PUSH_PATH, "/v3/push");
+        this.put(FILE_PUSH_PATH, "/v3/push/file");
         this.put(BATCH_REGID_PUSH_PATH, "/v3/push/batch/regid/single");
         this.put(BATCH_ALIAS_PUSH_PATH, "/v3/push/batch/alias/single");
         this.put(PUSH_VALIDATE_PATH, "/v3/push/validate");
