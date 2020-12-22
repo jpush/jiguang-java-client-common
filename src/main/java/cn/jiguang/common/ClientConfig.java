@@ -67,6 +67,9 @@ public class ClientConfig extends HashMap<String, Object> {
     public static final String V3_FILES_PATH = "jpush.v3.files.path";
     public static final Object V3_FILES_PATH_SCHEMA = String.class;
 
+    public static final String V3_IMAGES_PATH = "jpush.v3.images.path";
+    public static final Object V3_IMAGES_PATH_SCHEMA = String.class;
+
     public static final String SSL_VERSION = "ssl.version";
     public static final Object SSL_VERSION_SCHEMA = String.class;
     public static final String DEFAULT_SSL_VERSION = "TLS";
@@ -152,6 +155,8 @@ public class ClientConfig extends HashMap<String, Object> {
         this.put(SCHEDULE_PATH, "/v3/schedules");
 
         this.put(V3_FILES_PATH, "/v3/files");
+
+        this.put(V3_IMAGES_PATH, "/v3/images");
 
         this.put(SSL_VERSION, DEFAULT_SSL_VERSION);
         this.put(MAX_RETRY_TIMES, DEFULT_MAX_RETRY_TIMES);
