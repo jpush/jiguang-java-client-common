@@ -4,7 +4,8 @@ public enum DeviceType {
     
 	Android("android"),
 	IOS("ios"),
-	WinPhone("winphone");
+	WinPhone("winphone"),
+	QuickApp("quickapp");
 	
 	private final String value;
 	
