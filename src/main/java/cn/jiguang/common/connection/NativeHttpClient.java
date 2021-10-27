@@ -133,14 +133,7 @@ public class NativeHttpClient implements IHttpClient {
         try {
             URL aUrl = new URL(url);
 
-            if (null != _proxy) {
-                conn = (HttpURLConnection) aUrl.openConnection(_proxy.getNetProxy());
-                if (_proxy.isAuthenticationNeeded()) {
-                    conn.setRequestProperty("Proxy-Authorization", _proxy.getProxyAuthorization());
-                }
-            } else {
-                conn = (HttpURLConnection) aUrl.openConnection();
-            }
+            conn = getConnectionByUrl(aUrl);
 
             conn.setConnectTimeout(_connectionTimeout);
             conn.setReadTimeout(_readTimeout);
@@ -315,7 +308,7 @@ public class NativeHttpClient implements IHttpClient {
         String BOUNDARY = "---------------------------" + System.currentTimeMillis();
         try {
             URL url = new URL(urlStr);
-            conn = (HttpURLConnection) url.openConnection();
+            conn = getConnectionByUrl(url);
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(30000);
             conn.setDoOutput(true);
@@ -421,6 +414,19 @@ public class NativeHttpClient implements IHttpClient {
             }
         }
         return res;
+    }
+
+    public HttpURLConnection getConnectionByUrl(URL url) throws IOException {
+        HttpURLConnection conn;
+        if (null != _proxy) {
+            conn = (HttpURLConnection) url.openConnection(_proxy.getNetProxy());
+            if (_proxy.isAuthenticationNeeded()) {
+                conn.setRequestProperty("Proxy-Authorization", _proxy.getProxyAuthorization());
+            }
+        } else {
+            conn = (HttpURLConnection) url.openConnection();
+        }
+        return conn;
     }
 
     private static class SimpleHostnameVerifier implements HostnameVerifier {
