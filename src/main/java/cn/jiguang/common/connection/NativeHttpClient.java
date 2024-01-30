@@ -197,7 +197,7 @@ public class NativeHttpClient implements IHttpClient {
 
                 switch (status) {
                     case 400:
-                        LOG.error("Your request params is invalid. Please check them according to error message.");
+                        LOG.warn("Your request params is invalid. Please check them according to error message.");
                         wrapper.setErrorObject();
                         break;
                     case 401:
