@@ -95,13 +95,19 @@ public class ResponseWrapper implements Serializable {
 		return _gson.toJson(this);
 	}
 	
-	public static class ErrorObject {
-	    public long msg_id;
+	public static class ErrorObject implements Serializable {
+
+        private static final long serialVersionUID = -144321118510001864L;
+
+        public long msg_id;
         public ErrorEntity error;
 	}
 	
-	public static class ErrorEntity {
-	    public int code;
+	public static class ErrorEntity implements Serializable{
+
+        private static final long serialVersionUID = 420152986002902188L;
+
+        public int code;
 	    public String message;
 
 	    @Override
