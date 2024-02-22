@@ -463,32 +463,32 @@ public class ApacheHttpClient implements IHttpClient {
                     wrapper.setErrorObject();
                     break;
                 case 401:
-                    LOG.error("Authentication failed! Please check authentication params according to docs.");
+                    LOG.warn("Authentication failed! Please check authentication params according to docs.");
                     wrapper.setErrorObject();
                     break;
                 case 403:
-                    LOG.error("Request is forbidden! Maybe your appkey is listed in blacklist or your params is invalid.");
+                    LOG.warn("Request is forbidden! Maybe your appkey is listed in blacklist or your params is invalid.");
                     wrapper.setErrorObject();
                     break;
                 case 404:
-                    LOG.error("Request page is not found! Maybe your params is invalid.");
+                    LOG.warn("Request page is not found! Maybe your params is invalid.");
                     wrapper.setErrorObject();
                     break;
                 case 410:
-                    LOG.error("Request resource is no longer in service. Please according to notice on official website.");
+                    LOG.warn("Request resource is no longer in service. Please according to notice on official website.");
                     wrapper.setErrorObject();
                 case 429:
-                    LOG.error("Too many requests! Please review your appkey's request quota.");
+                    LOG.warn("Too many requests! Please review your appkey's request quota.");
                     wrapper.setErrorObject();
                     break;
                 case 500:
                 case 502:
                 case 503:
                 case 504:
-                    LOG.error("Seems encountered server error. Maybe JPush is in maintenance? Please retry later.");
+                    LOG.warn("Seems encountered server error. Maybe JPush is in maintenance? Please retry later.");
                     break;
                 default:
-                    LOG.error("Unexpected response.");
+                    LOG.warn("Unexpected response.");
             }
 
             throw new APIRequestException(wrapper);
